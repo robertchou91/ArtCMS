@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29025.244
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtCMS", "ArtCMS\ArtCMS.csproj", "{DAAE6D6F-67D2-484B-B97C-7FE301A4A01F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DAAE6D6F-67D2-484B-B97C-7FE301A4A01F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAAE6D6F-67D2-484B-B97C-7FE301A4A01F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAAE6D6F-67D2-484B-B97C-7FE301A4A01F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAAE6D6F-67D2-484B-B97C-7FE301A4A01F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {23C00A90-CA1A-45A1-9D9A-92C8E71E171F}
+	EndGlobalSection
+EndGlobal
