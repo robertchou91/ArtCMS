@@ -27,5 +27,12 @@ namespace ArtCMS.Areas.Admin.Controllers
             // Return the list
             return View(pagesList);
         }
+
+
+        // GET: Admin/Pages/AddPage
+        public ActionResult AddPage()
+        {
+            return View();
+        }
     }
 }
