@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace ArtCMS.Models.ViewModels.Pages
 {
@@ -18,6 +19,7 @@ namespace ArtCMS.Models.ViewModels.Pages
             Body = row.Body;
         }
         public int Id { get; set; }
+        [AllowHtml]
         public string Body { get; set; }
     }
 }

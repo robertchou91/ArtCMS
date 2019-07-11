@@ -18,8 +18,9 @@
 
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav mr-auto">
-                    <li><a href="/admin/pages">Pages</a></li>
-                    <li><a href="/admin/pages/editsidebar">Sidebar</a></li>
+                    <li class="nav-item">@Html.ActionLink("Pages", "Index", "Pages", null, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Sidebar", "EditSidebar", "Pages", null, new { @class = "nav-link" })</li>
+                    
                 </ul>
                 <ul class="nav navbar-nav">
                     <li class="listhomelink"><a href="/" class="navbar-nav navbar-brand" target="_blank">ArtCMS</a></li>
