@@ -136,7 +136,9 @@
     </Compile>
     <Compile Include="Models\Data\Db.cs" />
     <Compile Include="Models\Data\PageDTO.cs" />
+    <Compile Include="Models\Data\SidebarDTO.cs" />
     <Compile Include="Models\ViewModels\Pages\PageVM.cs" />
+    <Compile Include="Models\ViewModels\Pages\SidebarVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -183,6 +185,7 @@
     <Content Include="Areas\Admin\Views\Pages\AddPage.cshtml" />
     <Content Include="Areas\Admin\Views\Pages\EditPage.cshtml" />
     <Content Include="Areas\Admin\Views\Pages\PageDetails.cshtml" />
+    <Content Include="Areas\Admin\Views\Pages\EditSidebar.cshtml" />
     <None Include="Scripts\jquery-3.4.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.0.js" />
     <Content Include="Scripts\jquery-3.4.0.min.js" />

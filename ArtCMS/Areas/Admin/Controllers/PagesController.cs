@@ -245,5 +245,48 @@ namespace ArtCMS.Areas.Admin.Controllers
                 }
             }
         }
+
+        // GET: Admin/Pages/EditSidebar
+        [HttpGet]
+        public ActionResult EditSidebar()
+        {
+            // Declare the model
+            SidebarVM model;
+
+            using (Db db = new Db())
+            {
+                // get the dto
+                SidebarDTO dto = db.Sidebar.Find(1);
+
+                // Init the page
+                model = new SidebarVM(dto);
+            }
+
+            // return view with model
+            return View(model);
+        }
+
+        // POST: Admin/Pages/EditSidebar
+        [HttpPost]
+        public ActionResult EditSidebar(SidebarVM model)
+        {
+            using (Db db = new Db())
+            {
+                // get the dto
+                SidebarDTO dto = db.Sidebar.Find(1);
+
+                // dto the body
+                dto.Body = model.Body;
+
+                // save
+                db.SaveChanges();
+            }
+
+            // tempdata
+            TempData["SM"] = "You have edited the sidebar!";
+
+            // return view
+            return RedirectToAction("EditSidebar");
+        }
     }
 }
