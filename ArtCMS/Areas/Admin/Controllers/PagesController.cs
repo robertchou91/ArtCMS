@@ -91,5 +91,30 @@ namespace ArtCMS.Areas.Admin.Controllers
             // Redirect
             return RedirectToAction("AddPage");
         }
+
+        // GET: Admin/Pages/EditPage/id
+        public ActionResult EditPage(int id)
+        {
+            // Declare PageVM
+            PageVM model;
+
+            using (Db db = new Db())
+            {
+                // Get the page
+                PageDTO dto = db.Pages.Find(id);
+
+                // Confirm the page exist
+                if (dto == null)
+                {
+                    return Content("The page does not exist!");
+                }
+
+                // Init the page
+                model = new PageVM(dto);
+            }
+
+            // return the view with the model
+            return View(model);
+        }
     }
 }
