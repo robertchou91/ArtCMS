@@ -48,9 +48,48 @@ namespace ArtCMS.Areas.Admin.Controllers
 
             using (Db db = new Db())
             {
+                // Declare slug
+                string slug;
 
+                // init PageDTO
+                var dto = new PageDTO();
+
+                // DTO title
+                dto.Title = model.Title;
+
+                // check for and set slug if need be
+                if (string.IsNullOrWhiteSpace(model.Slug))
+                {
+                    slug = model.Title.Replace(" ", "-").ToLower();
+                }
+                else
+                {
+                    slug = model.Slug.Replace(" ", "-").ToLower();
+                }
+
+                // Make sure Title and Slug are unique
+                if (db.Pages.Any(x => x.Title == model.Title) || db.Pages.Any(x => x.Slug == slug))
+                {
+                    ModelState.AddModelError("", "The Title or Slug already exist.");
+                    return View(model);
+                }
+
+                // DTO the rest
+                dto.Slug = slug;
+                dto.Body = model.Body;
+                dto.HasSideBar = model.HasSideBar;
+                dto.Sorting = 100;
+
+                // Save DTO
+                db.Pages.Add(dto);
+                db.SaveChanges();
             }
-            return View();
+
+            // Set TempData Message
+            TempData["SM"] = "You have added a new page!";
+
+            // Redirect
+            return RedirectToAction("AddPage");
         }
     }
 }
