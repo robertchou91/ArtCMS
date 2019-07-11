@@ -70,7 +70,7 @@ namespace ArtCMS.Areas.Admin.Controllers
                 // Make sure Title and Slug are unique
                 if (db.Pages.Any(x => x.Title == model.Title) || db.Pages.Any(x => x.Slug == slug))
                 {
-                    ModelState.AddModelError("", "The Title or Slug already exist.");
+                    ModelState.AddModelError("", "The Title or Slug already exists.");
                     return View(model);
                 }
 
@@ -93,6 +93,7 @@ namespace ArtCMS.Areas.Admin.Controllers
         }
 
         // GET: Admin/Pages/EditPage/id
+        [HttpGet]
         public ActionResult EditPage(int id)
         {
             // Declare PageVM
@@ -115,6 +116,67 @@ namespace ArtCMS.Areas.Admin.Controllers
 
             // return the view with the model
             return View(model);
+        }
+
+        // POST: Admin/Pages/EditPage/id
+        [HttpPost]
+        public ActionResult EditPage(PageVM model)
+        {
+            // check model state
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            using (Db db = new Db())
+            {
+                // get the page id
+                int id = model.Id;
+
+                // init slug
+                string slug = "home";
+
+                // get the page
+                PageDTO dto = db.Pages.Find(id);
+
+                // DTO the title
+                dto.Title = model.Title;
+
+                // check for and set slug if need be
+                if (model.Slug != "home")
+                {
+                    if (string.IsNullOrWhiteSpace(model.Slug))
+                    {
+                        slug = model.Title.Replace(" ", "-").ToLower();
+                    }
+                    else
+                    {
+                        slug = model.Slug.Replace(" ", "-").ToLower();
+                    }
+                }
+
+                // make sure title and slug are unique
+                if (db.Pages.Where(x => x.Id != id).Any(x => x.Title == model.Title) || db.Pages.Where(x => x.Id != id).Any(x => x.Slug == slug))
+                {
+                    ModelState.AddModelError("", "The Title or Slug already exists.");
+                    return View(model);
+                }
+
+                // DTO the rest
+                dto.Slug = slug;
+                dto.Body = model.Body;
+                dto.HasSideBar = model.HasSideBar;
+
+                // Save the DTO
+                db.SaveChanges();
+           
+
+            }
+            // set the tempdata message
+            TempData["SM"] = "You have added a new page!";
+
+            // Redirect
+            return RedirectToAction("EditPage");
         }
     }
 }
