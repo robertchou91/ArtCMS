@@ -178,5 +178,72 @@ namespace ArtCMS.Areas.Admin.Controllers
             // Redirect
             return RedirectToAction("EditPage");
         }
+
+        // GET: Admin/Pages/PageDetails/id
+        public ActionResult PageDetails(int id)
+        {
+            // Declare PageVM
+            PageVM model;
+
+            using (Db db = new Db())
+            {
+                // get the page
+                PageDTO dto = db.Pages.Find(id);
+
+                //confirm the page
+                if (dto == null)
+                {
+                    return Content("The page does not exist!");
+                }
+
+                // Init the page
+                model = new PageVM(dto);
+
+            }
+            return View(model);
+        }
+
+        // DELETE: Admin/Pages/DeletePage/id
+        public ActionResult DeletePage(int id)
+        {
+            using (Db db = new Db())
+            {
+                // get the page
+                PageDTO dto = db.Pages.Find(id);
+
+                // remove the page
+                db.Pages.Remove(dto);
+
+                // Save
+                db.SaveChanges();
+            }
+
+            // Redirect
+            return RedirectToAction("Index");
+        }
+
+        // POST: Admin/Pages/ReorderPages
+        [HttpPost]
+        public void ReorderPages(int[] id)
+        {
+            using (Db db = new Db())
+            {
+                // set initial count
+                int count = 1;
+
+                // declare PageDTO
+                PageDTO dto;
+
+                // set sorting for each page
+                foreach (var pageId in id)
+                {
+                    dto = db.Pages.Find(pageId);
+                    dto.Sorting = count;
+
+                    db.SaveChanges();
+                    count++;
+                }
+            }
+        }
     }
 }

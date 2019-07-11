@@ -1,6 +1,4 @@
-﻿
-
-/* Set padding to keep content from hitting the edges */
+﻿/* Set padding to keep content from hitting the edges */
 
 .body-content {
     padding-left: 15px;
@@ -21,4 +19,12 @@
 
 .listhomelink {
     list-style-type: none;
+}
+
+table.sorting tr:not(.home) {
+    cursor: pointer;
+}
+
+.ui-state-highlight {
+    border: 1px dashed #ccc;
 }
