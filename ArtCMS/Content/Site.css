@@ -28,3 +28,16 @@ table.sorting tr:not(.home) {
 .ui-state-highlight {
     border: 1px dashed #ccc;
 }
+
+.new-category {
+    margin-top: 30px;
+    position: relative;
+}
+
+.ajax-text {
+    display: none;
+}
+
+table.sorting.categories td {
+    padding: 20px !important;
+}
