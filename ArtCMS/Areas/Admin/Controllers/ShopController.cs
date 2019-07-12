@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ArtCMS.Models.Data;
+using ArtCMS.Models.ViewModels.Shop;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,10 +10,22 @@ namespace ArtCMS.Areas.Admin.Controllers
 {
     public class ShopController : Controller
     {
-        // GET: Admin/Shop
-        public ActionResult Index()
+        // GET: Admin/Shop/Categories
+        public ActionResult Categories()
         {
-            return View();
+            // declare the list of CategoryVM
+            List<CategoryVM> categoryVMList;
+
+            using (Db db = new Db())
+            {
+                // Init the list
+                categoryVMList = db.Categories
+                                .ToArray()
+                                .OrderBy(x => x.Sorting)
+                                .Select(x => new CategoryVM(x))
+                                .ToList();
+            }
+            return View(categoryVMList);
         }
     }
 }
