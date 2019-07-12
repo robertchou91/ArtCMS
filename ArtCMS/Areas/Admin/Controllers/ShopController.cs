@@ -103,5 +103,32 @@ namespace ArtCMS.Areas.Admin.Controllers
             // Redirect
             return RedirectToAction("Categories");
         }
+
+        // POST: Admin/Shop/RenameCategory
+        [HttpPost]
+        public string RenameCategory(string newCatName, int id)
+        {
+            using (Db db = new Db())
+            {
+                // check if category name is unique
+                if (db.Categories.Any(x => x.Name == newCatName))
+                {
+                    return "titletaken";
+                }
+
+                // get the dto
+                CategoryDTO dto = db.Categories.Find(id);
+
+                // edit dto
+                dto.Name = newCatName;
+                dto.Slug = newCatName.Replace(" ", "-").ToLower();
+
+                // save changes
+                db.SaveChanges();
+            }
+
+            // return 
+            return "ok";
+        }
     }
 }
