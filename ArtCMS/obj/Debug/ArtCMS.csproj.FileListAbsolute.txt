@@ -78,3 +78,7 @@
 \\Mac\Home\Documents\Projects\ArtCMS\ArtCMS\bin\EntityFramework.SqlServer.dll
 \\Mac\Home\Documents\Projects\ArtCMS\ArtCMS\bin\EntityFramework.xml
 \\Mac\Home\Documents\Projects\ArtCMS\ArtCMS\bin\EntityFramework.SqlServer.xml
+\\Mac\Home\Documents\Projects\ArtCMS\ArtCMS\bin\PagedList.dll
+\\Mac\Home\Documents\Projects\ArtCMS\ArtCMS\bin\PagedList.Mvc.dll
+\\Mac\Home\Documents\Projects\ArtCMS\ArtCMS\bin\PagedList.xml
+\\Mac\Home\Documents\Projects\ArtCMS\ArtCMS\bin\PagedList.Mvc.xml
