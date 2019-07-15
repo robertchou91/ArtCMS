@@ -404,6 +404,71 @@ namespace ArtCMS.Areas.Admin.Controllers
             // set tempdata message
             TempData["SM"] = "You have edited the product!";
 
+            #region Image Upload
+
+            // Check for file upload
+            if (file != null && file.ContentLength > 0)
+            {
+                // get extension
+                string ext = file.ContentType.ToLower();
+
+                // verify extension
+                if (ext != "image/jpg" &&
+                    ext != "image/jpeg" &&
+                    ext != "image/pjpeg" &&
+                    ext != "image/gif" &&
+                    ext != "image/png" &&
+                    ext != "image/x-png")
+                {
+                    using (Db db = new Db())
+                    {
+                        ModelState.AddModelError("", "The image was not uploaded! Wrong image extension.");
+                        return View(model);
+
+                    }
+                }
+
+                // set upload directory paths
+                var originalDirectory = new DirectoryInfo(string.Format("{0}Images\\Uploads", Server.MapPath(@"\")));
+
+                var pathString1 = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString());
+                var pathString2 = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString() + "\\Thumbs");
+
+                // delete files from directories
+                DirectoryInfo di1 = new DirectoryInfo(pathString1);
+                DirectoryInfo di2 = new DirectoryInfo(pathString2);
+
+                foreach (FileInfo file2 in di1.GetFiles())
+                    file2.Delete();
+
+                foreach (FileInfo file3 in di2.GetFiles())
+                    file3.Delete();
+
+                // Save image name
+                string imageName = Path.GetFileName(file.FileName);
+
+                using (Db db = new Db())
+                {
+                    ProductDTO dto = db.Products.Find(id);
+                    dto.ImageName = imageName;
+
+                    db.SaveChanges();
+                }
+
+                // save original and thumb images
+                var path = string.Format("{0}\\{1}", pathString1, imageName);
+                var path2 = string.Format("{0}\\{1}", pathString2, imageName);
+
+                //save original
+                file.SaveAs(path);
+
+                // create and save thumb
+                WebImage img = new WebImage(file.InputStream);
+                img.Resize(200, 200);
+                img.Save(path2);
+            }
+            #endregion
+
 
             // Redirect
             return RedirectToAction("EditProduct");
