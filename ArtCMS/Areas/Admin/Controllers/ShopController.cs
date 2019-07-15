@@ -130,5 +130,22 @@ namespace ArtCMS.Areas.Admin.Controllers
             // return 
             return "ok";
         }
+
+        // GET: Admin/Shop/AddProduct
+        
+        public ActionResult AddProduct()
+        {
+            // init the model
+            ProductVM model = new ProductVM();
+
+            // add select list of the categories to the model
+            using (Db db = new Db())
+            {
+                model.Categories = new SelectList(db.Categories.ToList(), "Id", "Name");
+            }
+
+            // return the model to the view
+            return View(model);
+        }
     }
 }
