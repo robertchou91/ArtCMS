@@ -473,5 +473,30 @@ namespace ArtCMS.Areas.Admin.Controllers
             // Redirect
             return RedirectToAction("EditProduct");
         }
+
+        // DELETE: Admin/Shop/DeleteProduct/id
+        public ActionResult DeleteProduct(int id)
+        {
+            // Delete Product from the Db
+            using (Db db = new Db())
+            {
+                ProductDTO dto = db.Products.Find(id);
+                db.Products.Remove(dto);
+                db.SaveChanges();
+            }
+
+            // delete product folder
+            var originalDirectory = new DirectoryInfo(string.Format("{0}Images\\Uploads", Server.MapPath(@"\")));
+
+            string pathString = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString());
+
+            if (Directory.Exists(pathString))
+                Directory.Delete(pathString, true);
+            
+
+            // redirect view
+
+            return RedirectToAction("Products");
+        }
     }
 }
