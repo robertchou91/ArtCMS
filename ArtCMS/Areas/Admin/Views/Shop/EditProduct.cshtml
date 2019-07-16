@@ -95,6 +95,7 @@
 }
 
 <form action="/admin/shop/SaveGalleryImages" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm">
+    @Html.Hidden("id", Model.Id)
     <div class="fallback">
         <input type="file" name="file" multiple />
         <input type="submit" value="Upload" />
@@ -117,6 +118,26 @@
 @section Scripts {
     <script src="~/Scripts/dropzone/dropzone.js"></script>
     <script>
+
+        // Dropzone JS
+            Dropzone.options.dropzoneForm = {
+                acceptedFiles: "image/*",
+                init: function() {
+                    this.on("complete", function (file) {
+                        if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                            location.reload();
+                        }
+                        
+                    });
+
+                    this.on("sending", function (file, xhr, formData) {
+                        formData.append("id", @Model.Id);
+                    });
+                }
+            };
+
+            /////////////////////////////////////////////////////////
+
         $(function () {
 
             // Preview Selected Image
@@ -136,22 +157,7 @@
             });
             /////////////////////////////////////////////////////////
 
-            // Dropzone JS
-            Dropzone.options.dropzoneForm = {
-                acceptedFiles: "image/*",
-                init: function () {
-                    this.on("complete", function (file) {
-                        if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
-                            location.reload();
-                        }
-                    });
-                    this.on("sending", function (file, xhr, formData) {
-                        formData.append("id", @Model.Id);
-                    });
-                }
-            };
-
-            /////////////////////////////////////////////////////////
+            
 
 
         });
