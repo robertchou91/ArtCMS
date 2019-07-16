@@ -70,7 +70,19 @@
     }
 </table>
 
-@Html.PagedListPager((IPagedList)ViewBag.OnePageOfProducts, page => Url.Action("Products", new { page, catId = ViewBag.SelectedCat }))
+@Html.PagedListPager((IPagedList)ViewBag.OnePageOfProducts, page =>
+    Url.Action("Products", new { page, catId = ViewBag.SelectedCat }),
+    new PagedListRenderOptions
+    {
+        FunctionToTransformEachPageLink = (liTag, aTag) =>
+        {
+            aTag.Attributes.Add("class", "page-link");
+            liTag.InnerHtml = aTag.ToString();
+            return liTag;
+        },
+        LiElementClasses = new[] { "page-item" },
+        UlElementClasses = new[] { "pagination" }
+    })
 
 @section Scripts {
 
