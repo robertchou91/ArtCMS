@@ -59,3 +59,7 @@ span.ajaxmsg {
     position: absolute;
     bottom: 0;
 }
+
+.ib {
+    display: inline-block !important;
+}

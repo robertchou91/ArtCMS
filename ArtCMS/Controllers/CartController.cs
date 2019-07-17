@@ -1,4 +1,5 @@
-﻿using ArtCMS.Models.ViewModels.Cart;
+﻿using ArtCMS.Models.Data;
+using ArtCMS.Models.ViewModels.Cart;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,6 +66,61 @@ namespace ArtCMS.Controllers
                 model.Price = 0m;
                 
             }
+            // return partial view
+            return PartialView(model);
+        }
+
+        public ActionResult AddToCartPartial(int id)
+        {
+            // init CartVM list
+            List<CartVM> cart = Session["cart"] as List<CartVM> ?? new List<CartVM>();
+
+            // init CartVM
+            CartVM model = new CartVM();
+
+            using (Db db = new Db())
+            {
+                // get the product
+                ProductDTO product = db.Products.Find(id);
+
+                // check if product is already in cart
+                var productInCart = cart.FirstOrDefault(x => x.ProductId == id);
+
+                // if not add new product to cart
+                if (productInCart == null)
+                {
+                    cart.Add(new CartVM()
+                    {
+                        ProductId = product.Id,
+                        ProductName = product.Name,
+                        Quantity = 1,
+                        Price = product.Price,
+                        Image = product.ImageName
+                    }); 
+                }
+                else
+                {
+                    // if there is , increment
+                    productInCart.Quantity++;
+                    
+                }
+            }
+            // get total quantity and price of the shopping cart and add to model
+            int qty = 0;
+            decimal price = 0m;
+
+            foreach (var item in cart)
+            {
+                qty += item.Quantity;
+                price += item.Quantity * item.Price;
+            }
+
+            model.Quantity = qty;
+            model.Price = price;
+
+            // save back to the session
+            Session["cart"] = cart;
+
             // return partial view
             return PartialView(model);
         }
