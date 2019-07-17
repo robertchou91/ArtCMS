@@ -30,5 +30,29 @@ namespace ArtCMS.Controllers
             // return partial view with list
             return PartialView(categoryVMList);
         }
+
+        // Get: /shop/category/name
+        public ActionResult Category(string name)
+        {
+            // declare list of prductvm
+            List<ProductVM> productVMList;
+
+            using (Db db = new Db())
+            {
+                // get category id
+                CategoryDTO categoryDTO = db.Categories.Where(x => x.Slug == name).FirstOrDefault();
+                int catId = categoryDTO.Id;
+
+                // init the list 
+                productVMList = db.Products.ToArray().Where(x => x.CategoryId == catId).Select(x => new ProductVM(x)).ToList();
+
+                // get category name
+                var productCat = db.Products.Where(x => x.CategoryId == catId).FirstOrDefault();
+                ViewBag.CategoryName = productCat.CategoryName;
+            }
+
+            // return view with list
+            return View(productVMList);
+        }
     }
 }
