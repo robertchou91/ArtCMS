@@ -133,7 +133,7 @@ namespace ArtCMS.Controllers
         public JsonResult IncrementProduct(int productId)
         {
             // init cart list
-            List<CartVM> cart = Session["cart"] as List<CartVM> ?? new List<CartVM>();
+            List<CartVM> cart = Session["cart"] as List<CartVM>;
 
             using (Db db = new Db())
             {
@@ -150,6 +150,36 @@ namespace ArtCMS.Controllers
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
             
+        }
+
+        // GET: /Cart/DecrementProduct
+        public JsonResult DecrementProduct(int productId)
+        {
+            // init cart list
+            List<CartVM> cart = Session["cart"] as List<CartVM>;
+
+            using (Db db = new Db())
+            {
+                // get model from the list
+                CartVM model = cart.FirstOrDefault(x => x.ProductId == productId);
+
+                // decrement the quantity
+                if (model.Quantity > 1)
+                {
+                    model.Quantity--;
+                }
+                else
+                {
+                    model.Quantity = 0;
+                    cart.Remove(model);
+                }
+
+                // store needed data
+                var result = new { qty = model.Quantity, price = model.Price };
+
+                // return Json
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }
