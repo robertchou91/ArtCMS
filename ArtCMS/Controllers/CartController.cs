@@ -75,21 +75,21 @@ namespace ArtCMS.Controllers
 
         public ActionResult AddToCartPartial(int id)
         {
-            // init CartVM list
+            // Init CartVM list
             List<CartVM> cart = Session["cart"] as List<CartVM> ?? new List<CartVM>();
 
-            // init CartVM
+            // Init CartVM
             CartVM model = new CartVM();
 
             using (Db db = new Db())
             {
-                // get the product
+                // Get the product
                 ProductDTO product = db.Products.Find(id);
 
-                // check if product is already in cart
+                // Check if the product is already in cart
                 var productInCart = cart.FirstOrDefault(x => x.ProductId == id);
 
-                // if not add new product to cart
+                // If not, add new
                 if (productInCart == null)
                 {
                     cart.Add(new CartVM()
@@ -99,16 +99,17 @@ namespace ArtCMS.Controllers
                         Quantity = 1,
                         Price = product.Price,
                         Image = product.ImageName
-                    }); 
+                    });
                 }
                 else
                 {
-                    // if there is , increment
+                    // If it is, increment
                     productInCart.Quantity++;
-                    
                 }
             }
-            // get total quantity and price of the shopping cart and add to model
+
+            // Get total qty and price and add to model
+
             int qty = 0;
             decimal price = 0m;
 
@@ -121,11 +122,34 @@ namespace ArtCMS.Controllers
             model.Quantity = qty;
             model.Price = price;
 
-            // save back to the session
+            // Save cart back to session
             Session["cart"] = cart;
 
-            // return partial view
+            // Return partial view with model
             return PartialView(model);
+        }
+
+        // GET: /Cart/IncrementProduct
+        public JsonResult IncrementProduct(int productId)
+        {
+            // init cart list
+            List<CartVM> cart = Session["cart"] as List<CartVM> ?? new List<CartVM>();
+
+            using (Db db = new Db())
+            {
+                // get cartvm from list
+                CartVM model = cart.FirstOrDefault(x => x.ProductId == productId);
+
+                // increment qty
+                model.Quantity++;
+
+                // store needed data
+                var result = new { qty = model.Quantity, price = model.Price };
+
+                // return Json
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            
         }
     }
 }
