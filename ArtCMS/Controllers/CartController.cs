@@ -181,5 +181,21 @@ namespace ArtCMS.Controllers
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
+
+        // GET: /Cart/RemoveProduct
+        public void RemoveProduct(int productId)
+        {
+            // init cart list
+            List<CartVM> cart = Session["cart"] as List<CartVM>;
+
+            using (Db db = new Db())
+            {
+                // get model from the list
+                CartVM model = cart.FirstOrDefault(x => x.ProductId == productId);
+
+                // remove the model from the list
+                cart.Remove(model);
+            }
+        }
     }
 }
