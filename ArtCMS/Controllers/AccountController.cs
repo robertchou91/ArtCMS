@@ -166,5 +166,28 @@ namespace ArtCMS.Controllers
             return PartialView(model);
         }
 
+        // GET: Account/userprofile
+        [HttpGet]
+        [ActionName("user-profile")]
+        public ActionResult UserProfile()
+        {
+            // get the username
+            string username = User.Identity.Name;
+
+            // declare the model
+            UserProfileVM model;
+
+            using (Db db = new Db())
+            {
+                // get the user
+                UserDTO dto = db.Users.FirstOrDefault(x => x.Username == username);
+
+                // build model
+                model = new UserProfileVM(dto);
+            }
+            // return the view
+            return View("UserProfile", model);
+        }
+
     }
 }
