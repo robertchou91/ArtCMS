@@ -197,5 +197,13 @@ namespace ArtCMS.Controllers
                 cart.Remove(model);
             }
         }
+
+        public ActionResult PaypalPartial()
+        {
+            // init cart list
+            List<CartVM> cart = Session["cart"] as List<CartVM>;
+
+            return PartialView(cart);
+        }
     }
 }
