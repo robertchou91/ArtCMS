@@ -3,6 +3,8 @@ using ArtCMS.Models.ViewModels.Cart;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 
@@ -204,6 +206,66 @@ namespace ArtCMS.Controllers
             List<CartVM> cart = Session["cart"] as List<CartVM>;
 
             return PartialView(cart);
+        }
+
+        // POST: /Cart/PlaceOrder
+        [HttpPost]
+        public void PlaceOrder()
+        {
+            // init cart list
+            List<CartVM> cart = Session["cart"] as List<CartVM>;
+
+            // get username
+            string username = User.Identity.Name;
+
+            int orderId = 0;
+
+            using (Db db = new Db())
+            {
+                // init OrderDTO
+                OrderDTO orderDTO = new OrderDTO();
+
+                // get user id
+                var q = db.Users.FirstOrDefault(x => x.Username == username);
+                int userId = q.Id;
+
+                // Add to OrderDTO and save
+                orderDTO.UserId = userId;
+                orderDTO.CreatedAt = DateTime.Now;
+
+                db.Orders.Add(orderDTO);
+
+                db.SaveChanges();
+
+                // Get inserted id
+                orderId = orderDTO.OrderId;
+
+                // Init OrderDetailsDTO
+                OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO();
+
+                // Add to OrderDetailsDTO
+                foreach (var item in cart)
+                {
+                    orderDetailsDTO.OrderId = orderId;
+                    orderDetailsDTO.UserId = userId;
+                    orderDetailsDTO.ProductId = item.ProductId;
+                    orderDetailsDTO.Quantity = item.Quantity;
+
+                    db.OrderDetails.Add(orderDetailsDTO);
+
+                    db.SaveChanges();
+                }
+            }
+            // email admin
+            var client = new SmtpClient("smtp.mailtrap.io", 2525)
+            {
+                Credentials = new NetworkCredential("73e75a7d869c03", "f39b1bc1b76e75"),
+                EnableSsl = true
+            };
+            client.Send("admin@example.com", "admin@example.com", "New Order", "You have a new order. Order number " + orderId);
+
+            // reset session
+            Session["cart"] = null;
         }
     }
 }
