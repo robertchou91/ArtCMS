@@ -69,6 +69,7 @@ span.ajaxmsg {
     text-decoration: none;
 }
 
-    #login-name a:hover {
-        color: rgba(255, 255, 255, 0.75);
-    }
+#login-name-active a{
+    color: rgba(255, 255, 255, 1.0);
+    text-decoration: none;
+}

@@ -11,7 +11,6 @@ namespace ArtCMS.Models.ViewModels.Account
     {
         public UserProfileVM()
         {
-
         }
 
         public UserProfileVM(UserDTO row)
@@ -22,8 +21,8 @@ namespace ArtCMS.Models.ViewModels.Account
             EmailAddress = row.EmailAddress;
             Username = row.Username;
             Password = row.Password;
-
         }
+
         public int Id { get; set; }
         [Required]
         public string FirstName { get; set; }
@@ -34,7 +33,6 @@ namespace ArtCMS.Models.ViewModels.Account
         public string EmailAddress { get; set; }
         [Required]
         public string Username { get; set; }
-        [Required]
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
     }

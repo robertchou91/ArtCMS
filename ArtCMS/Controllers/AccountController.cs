@@ -189,5 +189,69 @@ namespace ArtCMS.Controllers
             return View("UserProfile", model);
         }
 
+        // POST: Account/userprofile
+        [HttpPost]
+        [ActionName("user-profile")]
+        public ActionResult UserProfile(UserProfileVM model)
+        {
+            // check model state
+            if (!ModelState.IsValid)
+            {
+                return View("UserProfile", model);
+            }
+
+            // check if password match
+            if (!string.IsNullOrWhiteSpace(model.Password))
+            {
+                if(model.Password != model.ConfirmPassword)
+                {
+                    ModelState.AddModelError("", "Passwords do not match!");
+                    return View("UserProfile", model);
+                }
+            }
+
+            using (Db db = new Db())
+            {
+                // get username
+                string username = User.Identity.Name;
+
+                // make sure username is unique
+                if(db.Users.Where(x => x.Id != model.Id).Any(x => x.Username == username))
+                {
+                    ModelState.AddModelError("", "Username" + model.Username + "already exist!");
+                    model.Username = "";
+                    return View("UserProfile", model);
+                }
+
+                // edit dto
+                UserDTO dto = db.Users.Find(model.Id);
+
+                dto.FirstName = model.FirstName;
+                dto.LastName = model.LastName;
+                dto.EmailAddress = model.EmailAddress;
+                dto.Username = model.Username;
+
+                if (!string.IsNullOrWhiteSpace(model.Password))
+                {
+                    dto.Password = model.Password;
+                }
+
+                // save
+                db.SaveChanges();
+
+                if (!db.Users.Any(x => x.Username == username))
+                {
+                    FormsAuthentication.SignOut();
+                    return Redirect("~/account/login");
+                }
+            }
+
+            // set tempdata
+            TempData["SM"] = "You have edited your profile!";
+
+            // redirect view
+            return Redirect("~/account/user-profile");
+        }
+
     }
 }

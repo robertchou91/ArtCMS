@@ -35,14 +35,40 @@
 
                     }
 
-                    @if (Request.IsAuthenticated)
-                    { 
-                        <li class="nav-item"><div class="nav-link" id="login-name">@Html.Action("UserNavPartial", "Account", new { area = "" })</div></li>
+                    @if (Request.IsAuthenticated && User.IsInRole("User"))
+                    {
+                        if (ViewBag.Title == "User Profile")
+                        {
+                            <li class="nav-item"><div class="nav-link" id="login-name-active">@Html.Action("UserNavPartial", "Account", new { area = "" })</div></li>
+                        }
+                        else
+                        {
+                            <li class="nav-item"><div class="nav-link" id="login-name">@Html.Action("UserNavPartial", "Account", new { area = "" })</div></li>
+                        }
                     }
+
+
+
                 </ul>
-                <ul class="nav navbar-nav navbar-right ml-auto">
-                    @Html.Action("CartPartial", "Cart")
-                </ul>
+
+                @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <ul class="nav navbar-nav navbar-right ml-auto adminarea">
+                        <li>@Html.ActionLink("Admin Area", "Index", "Dashboard", new { area = "Admin" }, null)</li>
+                    </ul>
+                }
+                else
+                {
+                    if (ViewBag.Title != "Cart Details")
+                    {
+                        <ul class="nav navbar-nav navbar-right ml-auto">
+                            @Html.Action("CartPartial", "Cart")
+                        </ul>
+                    }
+
+                }
+
+
             </div>
         </div>
     </nav>
