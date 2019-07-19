@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace ArtCMS.Controllers
 {
@@ -17,6 +18,7 @@ namespace ArtCMS.Controllers
         }
 
         // GET: Account/Login
+        [HttpGet]
         public ActionResult Login()
         {
             // confirm that the user is not logged in
@@ -27,6 +29,39 @@ namespace ArtCMS.Controllers
 
             // return view
             return View();
+        }
+
+        // POST: Account/Login
+        [HttpPost]
+        public ActionResult Login(LoginUserVM model)
+        {
+            // check model state
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // check if user is valid
+            bool isValid = false;
+
+            using(Db db = new Db())
+            {
+                if (db.Users.Any(x => x.Username == model.Username && x.Password == model.Password))
+                {
+                    isValid = true;
+                }
+            }
+
+            if (!isValid)
+            {
+                ModelState.AddModelError("", "Invalid username or password!");
+                return View(model);
+            }
+            else
+            {
+                FormsAuthentication.SetAuthCookie(model.Username, model.RememberMe);
+                return Redirect(FormsAuthentication.GetRedirectUrl(model.Username, model.RememberMe));
+            }
         }
 
         // GET: Account/create-account
@@ -99,6 +134,37 @@ namespace ArtCMS.Controllers
             return Redirect("~/account/login");
         }
 
+        // GET: Account/logout
+        public ActionResult Logout()
+        {
+            FormsAuthentication.SignOut();
+            return Redirect("~/account/login");
+        }
+
+        public ActionResult UserNavPartial()
+        {
+            // get the username
+            string username = User.Identity.Name;
+
+            //declare model
+            UserNavPartialVM model;
+
+            using (Db db = new Db())
+            {
+                // get the user
+                UserDTO dto = db.Users.FirstOrDefault(x => x.Username == username);
+
+                // build the model
+                model = new UserNavPartialVM()
+                {
+                    FirstName = dto.FirstName,
+                    LastName = dto.LastName
+                };
+            }
+
+            // return view
+            return PartialView(model);
+        }
 
     }
 }

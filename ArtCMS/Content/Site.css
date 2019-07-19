@@ -63,3 +63,12 @@ span.ajaxmsg {
 .ib {
     display: inline-block !important;
 }
+
+#login-name a{
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+}
+
+    #login-name a:hover {
+        color: rgba(255, 255, 255, 0.75);
+    }
