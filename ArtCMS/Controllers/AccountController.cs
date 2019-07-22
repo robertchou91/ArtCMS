@@ -136,12 +136,14 @@ namespace ArtCMS.Controllers
         }
 
         // GET: Account/logout
+        [Authorize]
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
             return Redirect("~/account/login");
         }
 
+        [Authorize]
         public ActionResult UserNavPartial()
         {
             // get the username
@@ -170,6 +172,7 @@ namespace ArtCMS.Controllers
         // GET: Account/userprofile
         [HttpGet]
         [ActionName("user-profile")]
+        [Authorize]
         public ActionResult UserProfile()
         {
             // get the username
@@ -193,6 +196,7 @@ namespace ArtCMS.Controllers
         // POST: Account/userprofile
         [HttpPost]
         [ActionName("user-profile")]
+        [Authorize]
         public ActionResult UserProfile(UserProfileVM model)
         {
             // check model state
@@ -255,6 +259,7 @@ namespace ArtCMS.Controllers
         }
 
         // GET: Account/Orders
+        [Authorize(Roles="User")]
         public ActionResult Orders()
         {
             // init list of OrdersForUserVM

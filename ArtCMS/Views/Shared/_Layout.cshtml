@@ -37,7 +37,7 @@
 
                     @if (Request.IsAuthenticated && User.IsInRole("User"))
                     {
-                        if (ViewBag.Title == "User Profile")
+                        if (ViewBag.Title == "User Profile" || ViewBag.Title == "Orders")
                         {
                             <li class="nav-item"><div class="nav-link" id="login-name-active">@Html.Action("UserNavPartial", "Account", new { area = "" })</div></li>
                         }
@@ -75,9 +75,30 @@
     <div class="container body-content">
         <div class="row">
             <div class="ajaxbg"><span><img src="~/Content/img/ajax-loader.gif" /></span></div>
-            <div class="col-xs-12 col-md-2">
-                @Html.Action("CategoryMenuPartial", "Shop")
-            </div>
+            @if (ViewBag.Title != "Create Account" && ViewBag.Title != "Login" && ViewBag.Title != "User Profile" && ViewBag.Title != "Orders")
+            {
+                <div class="col-xs-12 col-md-2">
+                    @Html.Action("CategoryMenuPartial", "Shop")
+                </div>
+            }
+
+            @if (ViewBag.Title == "User Profile")
+            {
+                <div class="col-xs-12 col-md-2">
+                    <ul>
+                        <li><a href="/account/orders">My Orders</a></li>
+                    </ul>
+                </div>
+            }
+
+            @if (ViewBag.Title == "Orders")
+            {
+                <div class="col-xs-12 col-md-2">
+                    <ul>
+                        <li><a href="/account/user-profile">My Profile</a></li>
+                    </ul>
+                </div>
+            }
 
             @if (ViewBag.Sidebar == "Yes")
             {
